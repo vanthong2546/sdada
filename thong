@@ -2,44 +2,40 @@ local player = game.Players.LocalPlayer
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
 local Window = OrionLib:MakeWindow({Name = "Title of the library", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
-local stop
+local stop = true -- Khởi tạo giá trị ban đầu cho biến `stop`
 local Tab = Window:MakeTab({
 	Name = "Tab 1",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
 
-
-
 local positionLabel = Tab:AddLabel("Pos X: 0, Pos Y: 0, Pos Z: 0")
 
 Tab:AddButton({
-	Name = "Button!",
+	Name = "Start Button",
 	Callback = function()
-         stop = false     
-              
-        while stop == false do
-            local player = game:GetService("Players").LocalPlayer
-            local character = player.Character or player.CharacterAdded:Wait()
-            local hmndrootpart = character:WaitForChild("HumanoidRootPart")
-            
-            local posX = math.round(hmndrootpart.Position.X)
-            local posY = math.round(hmndrootpart.Position.Y)
-            local posZ = math.round(hmndrootpart.Position.Z)
-            positionLabel:Set("Pos X: " .. posX .. ", Pos Y: " .. posY .. ", Pos Z: " .. posZ)
- 
-            wait(5)
-            end
-  	end    
-})
+        stop = false
 
+        -- Chạy vòng lặp trong một coroutine để không chặn giao diện người dùng
+        coroutine.wrap(function()
+            while not stop do
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+                
+                local posX = math.round(humanoidRootPart.Position.X)
+                local posY = math.round(humanoidRootPart.Position.Y)
+                local posZ = math.round(humanoidRootPart.Position.Z)
+                positionLabel:Set("Pos X: " .. posX .. ", Pos Y: " .. posY .. ", Pos Z: " .. posZ)
+
+                wait(5)
+            end
+        end)()
+    end
+})
 
 Tab:AddButton({
-	Name = "Stop button",
+	Name = "Stop Button",
 	Callback = function()
-          stop = true    
-              
-       
-  	end    
+        stop = true
+    end
 })
-
