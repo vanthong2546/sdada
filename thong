@@ -16,7 +16,7 @@ local positionLabel = Tab:AddLabel("Pos X: 0, Pos Y: 0, Pos Z: 0")
 Tab:AddButton({
 	Name = "Button!",
 	Callback = function()
-              
+         stop = false     
               
         while stop == false do
             local player = game:GetService("Players").LocalPlayer
